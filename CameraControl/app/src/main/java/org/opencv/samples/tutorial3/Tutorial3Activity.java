@@ -29,12 +29,15 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 public class Tutorial3Activity extends Activity implements CvCameraViewListener2, OnTouchListener {
+
     private static final String TAG = "OCVSample::Activity";
 
     private Tutorial3View mOpenCvCameraView;
     private List<Size> mResolutionList;
+
     private MenuItem[] mEffectMenuItems;
     private SubMenu mColorEffectsMenu;
+
     private MenuItem[] mResolutionMenuItems;
     private SubMenu mResolutionMenu;
 
@@ -42,16 +45,16 @@ public class Tutorial3Activity extends Activity implements CvCameraViewListener2
         @Override
         public void onManagerConnected(int status) {
             switch (status) {
-                case LoaderCallbackInterface.SUCCESS:
-                {
+                case LoaderCallbackInterface.SUCCESS: {
                     Log.i(TAG, "OpenCV loaded successfully");
                     mOpenCvCameraView.enableView();
                     mOpenCvCameraView.setOnTouchListener(Tutorial3Activity.this);
-                } break;
-                default:
-                {
+                }
+                break;
+                default: {
                     super.onManagerConnected(status);
-                } break;
+                }
+                break;
             }
         }
     };
@@ -60,7 +63,9 @@ public class Tutorial3Activity extends Activity implements CvCameraViewListener2
         Log.i(TAG, "Instantiated new " + this.getClass());
     }
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "called onCreate");
@@ -77,16 +82,14 @@ public class Tutorial3Activity extends Activity implements CvCameraViewListener2
     }
 
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         super.onPause();
         if (mOpenCvCameraView != null)
             mOpenCvCameraView.disableView();
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         if (!OpenCVLoader.initDebug()) {
             Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
@@ -127,10 +130,10 @@ public class Tutorial3Activity extends Activity implements CvCameraViewListener2
 
         int idx = 0;
         ListIterator<String> effectItr = effects.listIterator();
-        while(effectItr.hasNext()) {
-           String element = effectItr.next();
-           mEffectMenuItems[idx] = mColorEffectsMenu.add(1, idx, Menu.NONE, element);
-           idx++;
+        while (effectItr.hasNext()) {
+            String element = effectItr.next();
+            mEffectMenuItems[idx] = mColorEffectsMenu.add(1, idx, Menu.NONE, element);
+            idx++;
         }
 
         mResolutionMenu = menu.addSubMenu("Resolution");
@@ -139,25 +142,22 @@ public class Tutorial3Activity extends Activity implements CvCameraViewListener2
 
         ListIterator<Size> resolutionItr = mResolutionList.listIterator();
         idx = 0;
-        while(resolutionItr.hasNext()) {
+        while (resolutionItr.hasNext()) {
             Size element = resolutionItr.next();
             mResolutionMenuItems[idx] = mResolutionMenu.add(2, idx, Menu.NONE,
                     Integer.valueOf(element.width).toString() + "x" + Integer.valueOf(element.height).toString());
             idx++;
-         }
+        }
 
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i(TAG, "called onOptionsItemSelected; selected item: " + item);
-        if (item.getGroupId() == 1)
-        {
+        if (item.getGroupId() == 1) {
             mOpenCvCameraView.setEffect((String) item.getTitle());
             Toast.makeText(this, mOpenCvCameraView.getEffect(), Toast.LENGTH_SHORT).show();
-        }
-        else if (item.getGroupId() == 2)
-        {
+        } else if (item.getGroupId() == 2) {
             int id = item.getItemId();
             Size resolution = mResolutionList.get(id);
             mOpenCvCameraView.setResolution(resolution);
@@ -172,11 +172,11 @@ public class Tutorial3Activity extends Activity implements CvCameraViewListener2
     @SuppressLint("SimpleDateFormat")
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.i(TAG,"onTouch event");
+        Log.i(TAG, "onTouch event");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String currentDateandTime = sdf.format(new Date());
         String fileName = Environment.getExternalStorageDirectory().getPath() +
-                               "/sample_picture_" + currentDateandTime + ".jpg";
+                "/sample_picture_" + currentDateandTime + ".jpg";
         mOpenCvCameraView.takePicture(fileName);
         Toast.makeText(this, fileName + " saved", Toast.LENGTH_SHORT).show();
         return false;

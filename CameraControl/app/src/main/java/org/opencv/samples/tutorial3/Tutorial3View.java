@@ -15,6 +15,7 @@ import android.util.Log;
 public class Tutorial3View extends JavaCameraView implements PictureCallback {
 
     private static final String TAG = "Sample::Tutorial3View";
+
     private String mPictureFileName;
 
     public Tutorial3View(Context context, AttributeSet attrs) {
@@ -82,6 +83,5 @@ public class Tutorial3View extends JavaCameraView implements PictureCallback {
         } catch (java.io.IOException e) {
             Log.e("PictureDemo", "Exception in photoCallback", e);
         }
-
     }
 }
